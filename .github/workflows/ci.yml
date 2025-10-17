@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+# Run on push to any branch and on pull requests
+on:
+  push:
+    branches: [ main, feature/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Step 1: Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    # Step 2: Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: npm install
+    
+    # Step 4: Start server in background
+    - name: Start server
+      run: |
+        npm start &
+        sleep 5
+    
+    # Step 5: Run tests
+    - name: Run tests
+      run: npm test
+    
+    # Step 6: Show success message
+    - name: Tests passed
+      run: echo "✅ All tests passed! Ready for deployment."
