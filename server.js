@@ -32,6 +32,18 @@ app.post('/tasks', (req, res) => {
     tasks.push(newTask);
     res.status(201).json({ task: newTask });
 });
+// Delete a task
+app.delete('/tasks/:id', (req, res) => {
+    const { id } = req.params;
+    const taskIndex = tasks.findIndex(t => t.id === parseInt(id));
+
+    if (taskIndex === -1) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    const deletedTask = tasks.splice(taskIndex, 1);
+    res.json({ message: 'Task deleted', task: deletedTask[0] });
+});
 
 // Start server
 app.listen(PORT, () => {
